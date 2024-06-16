@@ -1,0 +1,76 @@
+""" Project Title: Karel_Pole_Climb_CIP : 
+The Karel climbs a pole of 400 pixels in height. 
+He climbs 20 pixels but slips down 10 pixels the next moment. 
+The process continues till he reaches the top of the pole. 
+Once he reaches the top of the tower, he will not slip.
+
+NOTE: Please run code in CIP contolled environment """
+
+from graphics import Canvas
+import time
+
+CANVAS_WIDTH = 400
+CANVAS_HEIGHT = 450
+
+# Pole Size
+POLE_WIDTH = 20
+POLE_HEIGHT = CANVAS_HEIGHT - 50
+
+# A Ball represents KAREL
+BODY_HEIGHT = 40
+BALL_DIAMETER = 30
+
+# Parameters
+DISTANCE_CLIMB = 20
+DISTANCE_SLIP = 10
+INITIAL_VELOCITY = 5
+DELAY = 0.1
+
+
+def main():
+    canvas = Canvas(CANVAS_WIDTH, CANVAS_HEIGHT)
+    #make pole
+    pole_x_left = CANVAS_WIDTH // 3
+    pole_y_top = CANVAS_HEIGHT - POLE_HEIGHT
+    pole_x_right = pole_x_left + POLE_WIDTH
+    pole_y_bottom = CANVAS_HEIGHT
+    canvas.create_rectangle(pole_x_left, pole_y_top, pole_x_right, pole_y_bottom, 'black') 
+
+    #make Ball
+    x_velocity = INITIAL_VELOCITY
+    y_velocity = INITIAL_VELOCITY
+    ball_x = pole_x_left + POLE_WIDTH + 2
+    ball_y = CANVAS_HEIGHT - BODY_HEIGHT
+    ball = canvas.create_oval(ball_x, ball_y,
+                              ball_x + BALL_DIAMETER,
+                              ball_y + BALL_DIAMETER,
+                              'blue')
+
+# Conditions for KAREL climbing the pole                             
+    while True:
+        if ball_y > CANVAS_HEIGHT - POLE_HEIGHT:
+            ball_y -= DISTANCE_CLIMB
+            canvas.moveto(ball, ball_x, ball_y)
+            time.sleep(DELAY)
+            ball_y += DISTANCE_SLIP
+            canvas.moveto(ball, ball_x, ball_y)
+            time.sleep(DELAY)
+
+        if ball_y == CANVAS_HEIGHT - POLE_HEIGHT:
+            ball = canvas.create_oval(ball_x, ball_y,
+                              ball_x + BALL_DIAMETER,
+                              ball_y + BALL_DIAMETER,
+                              'white')
+        if ball_y == CANVAS_HEIGHT - POLE_HEIGHT:
+            ball_final_left_x = ((pole_x_left + pole_x_right)/2) - BALL_DIAMETER/2
+            ball_final_left_y = (pole_y_top) - BALL_DIAMETER
+            ball_final_right_x = ((pole_x_left + pole_x_right)/2) + BALL_DIAMETER/2
+            ball_final_bottom_y = pole_y_top
+            ball_final = canvas.create_oval(ball_final_left_x,ball_final_left_y,
+                              ball_final_right_x, ball_final_bottom_y,
+                              'blue')
+    time.sleep(DELAY)
+    
+
+if __name__ == '__main__':
+    main()
